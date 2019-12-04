@@ -1,0 +1,72 @@
+doctype html
+html
+  include /../../static/assets/lib/ldui/pug/ldui.pug
+  head
+    +css("https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css")
+    +css("/assets/lib/ldui/ldui.min.css")
+  body
+    .m-4.p-4
+      textarea.form-control(ld="textarea",rows="5").
+        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+      br
+      .card: .card-body(contenteditable="true",ld="textarea",rows="5").
+        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+      .card: .card-body(ld="output")
+      .card: .card-body(ld="click")
+        div Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+        div Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+
+    +script("/assets/lib/ldui/ldui.min.js")
+    +script("/js/caret.js")
+    script: :lsc
+      lc = {}
+
+
+      caret = do
+        set: (node, start, end) -> node.setSelectionRange start, end
+        get: (node) -> [node.selectionStart, node.selectionEnd]
+      view = new ldView do
+        root: document
+        handler: do
+          output: ({node}) -> node.textContent = lc.text + " / #{JSON.stringify(lc.obj)} "
+        action: click: do
+          click: ({node, evt}) ->
+            range = window.getSelection!getRangeAt 0
+            console.log ">>", range.startContainer, range.endContainer
+            console.log range, document.activeElement
+          textarea: ({node, evt}) ->
+            console.log evt.clientX, evt.clientY
+            # firefox
+            range = (if document.caretPositionFromPoint => that evt.clientX, evt.clientY
+            # webkit
+            else document.caretRangeFromPoint evt.clientX, evt.clientY)
+            console.log range
+            #range = document.createRange!
+            # get caret position
+            range = window.getSelection!getRangeAt 0
+            console.log ">>", range.startContainer, range.endContainer
+            # this will be 'body' for non-editing elements.
+            console.log document.activeElement
+            if node.setSelectionRange =>
+              n = if document.activeElement.nodeName == \TEXTAREA => document.activeElement
+              lc.obj = obj = ns: n, ne: n, os: node.selectionStart, oe: node.selectionEnd
+              console.log ">", obj
+            else
+              range = window.getSelection!getRangeAt 0
+              lc.obj = obj = do
+                ns: range.startContainer, ne: range.endContainer, os: range.startOffset, oe: range.endOffset
+              console.log ")", obj
+
+            # get selected content
+            console.log lc.text = window.getSelection!toString!
+
+            # set caret position
+            if node.setSelectionRange => node.setSelectionRange 10, 20
+            else
+              range = document.createRange!
+              range.setStart node.childNodes[0], 10
+              range.setEnd node.childNodes[0], 20
+              selection = window.getSelection!
+              selection.removeAllRanges!
+              selection.addRange range
+            view.render!

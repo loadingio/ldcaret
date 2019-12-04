@@ -1,0 +1,79 @@
+doctype html
+html
+  include /../../static/assets/lib/ldui/pug/ldui.pug
+  include /mixins.pug
+  head
+    +css("https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css")
+    +css("/assets/lib/ldui/ldui.min.css")
+  body
+    .w-640.mx-auto.rwd: .p-4
+      .row
+        .col-md-4
+          .d-flex.align-items-center.mb-2
+            label.flex-grow-1.mb-0 Ctrl
+            .btn.btn-sm(style="opacity:0") &nbsp;
+          .form-group.mb-4
+            .btn.btn-outline-secondary.btn-sm.btn-block(ld="random-content") Random Content
+            .btn.btn-outline-secondary.btn-sm.btn-block(ld="clear") Clear Selection
+          .form-group.mb-4
+            label Selection
+            .bg-light.rounded.p-2(ld="output")
+        .col-md-8
+          .form-group.mb-4
+            .d-flex.align-items-center.mb-2
+              label.flex-grow-1.mb-0 Textarea
+              .btn.btn-sm.btn-outline-secondary.ml-4(ld="random",data-value="0") random
+            textarea.form-control.shadow-sm(ld="caret"): +lorem(150)
+          .form-group.mb-4
+            .d-flex.align-items-center.mb-2
+              label.flex-grow-1.mb-0 Input
+              .btn.btn-sm.btn-outline-secondary.ml-4(ld="random",data-value="1") random
+            input.form-control.shadow-sm(ld="caret",value=lorem(150))
+          .form-group.mb-4
+            .d-flex.align-items-center.mb-2
+              label.flex-grow-1.mb-0 Plain Text
+              .btn.btn-sm.btn-outline-secondary.ml-4(ld="random",data-value="2") random
+            .card.mb-4.shadow-sm: .card-body(ld="caret")
+              +lorem(150)
+          .form-group.mb-4
+            .d-flex.align-items-center.mb-2
+              label.flex-grow-1.mb-0 Plain Text ( Multi-Paragraph )
+              .btn.btn-sm.btn-outline-secondary.ml-4(ld="random",data-value="3") random
+            .card.mb-4.shadow-sm: .card-body(ld="caret")
+              +lorems(3, 100, 0.3)
+
+    +script("/assets/lib/ldui/ldui.min.js")
+    +script("/assets/lib/ldcaret.min.js")
+    script: :lsc
+      rand-pos = (n) ->
+        if n.nodeType != 1 => return [n, Math.floor(n.textContent.length * Math.random!)]
+        return rand-pos n.childNodes[Math.floor(n.childNodes.length * Math.random!)]
+
+      view = new ldView do
+        root: document
+        handler: output: ({node}) ->
+          obj = ldCaret.get!
+          content = ldCaret.get-content!
+          if !obj.ns => return node.textContent = ""
+          node.innerHTML = "#{obj.os} - #{obj.oe}<br>#content"
+
+        action: click: do
+          clear: debounce 2000, -> ldCaret.clear!
+          "random-content": debounce 2000, -> ldCaret.set-content \12345
+          caret: ({node, evt}) ->
+            view.render <[output]>
+          random: ({node}) ->
+            idx = +node.getAttribute(\data-value)
+            node = ns = ne = view.getAll(\caret)[idx]
+            if node.setSelectionRange => 
+              text = node.value
+              os = Math.floor(text.length * (Math.random! * 0.5))
+              oe = Math.ceil(text.length * (Math.random! * 0.5 + 0.5))
+            else
+              ns = node.childNodes[Math.floor(node.childNodes.length * (Math.random! * 0.5))]
+              ne = node.childNodes[Math.floor(node.childNodes.length * (Math.random! * 0.5 + 0.5))]
+              [ns, os] = rand-pos ns
+              [ne, oe] = rand-pos ne
+              if ns == ne => if os > oe => os = oe - 1
+            ldCaret.set { ns, ne, os, oe }
+            view.render <[output]>
