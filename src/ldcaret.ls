@@ -31,20 +31,34 @@
       selection = window.getSelection!
       selection.removeAllRanges!
 
+    # height = 0 if no caret. width = 0 if no selection (os = oe).
+    get-pos: ->
+      range = window.getSelection!getRangeAt 0
+      return range.getBoundingClientRect!
+
+    set-dom: (n) ->
+      range = window.getSelection!getRangeAt 0
+      range.deleteContents!
+      range.insertNode n
+
     set-content: (txt) ->
       obj = ldCaret.get!
       if obj.ns.setRangeText => return obj.ns.setRangeText txt
       range = window.getSelection!getRangeAt 0
       range.deleteContents!
-      range.insertNode n = document.createTextNode txt
+      if txt => range.insertNode n = document.createTextNode txt
       # if we want to simply the text nodes ...
       # [ns,ps] = [n.nextSibling, n.previousSibling]
       # if ns and ns.nodeType == 3 => n.nodeValue += ns.nodeValue; ns.parentNode.removeChild ns
       # if ps and ps.nodeType == 3 => ps.nodeValue += n.nodeValue; n.parentNode.removeChild n
       # TODO re-select after text node merged, otherwise select range will become the whole text node
 
-    get-content: ->
-      return text = window.getSelection!toString!
+    get-content: (opt) ->
+      if !opt => return text = window.getSelection!toString!
+      range = document.createRange!
+      range.setStart opt.ns, opt.os
+      range.setEnd opt.ne, opt.oe
+      return range.toString!
 
   window.ldCaret = ldCaret
 )!

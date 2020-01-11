@@ -45,6 +45,17 @@
       selection = window.getSelection();
       return selection.removeAllRanges();
     },
+    getPos: function(){
+      var range;
+      range = window.getSelection().getRangeAt(0);
+      return range.getBoundingClientRect();
+    },
+    setDom: function(n){
+      var range;
+      range = window.getSelection().getRangeAt(0);
+      range.deleteContents();
+      return range.insertNode(n);
+    },
     setContent: function(txt){
       var obj, range, n;
       obj = ldCaret.get();
@@ -53,11 +64,19 @@
       }
       range = window.getSelection().getRangeAt(0);
       range.deleteContents();
-      return range.insertNode(n = document.createTextNode(txt));
+      if (txt) {
+        return range.insertNode(n = document.createTextNode(txt));
+      }
     },
-    getContent: function(){
-      var text;
-      return text = window.getSelection().toString();
+    getContent: function(opt){
+      var text, range;
+      if (!opt) {
+        return text = window.getSelection().toString();
+      }
+      range = document.createRange();
+      range.setStart(opt.ns, opt.os);
+      range.setEnd(opt.ne, opt.oe);
+      return range.toString();
     }
   };
   return window.ldCaret = ldCaret;
