@@ -7,21 +7,15 @@ Caret Manipulation Library, in Vanilla JS.
 
 1. download and include [ldcaret.js](https://raw.githubusercontent.com/loadingio/ldCaret/v0.0.1/dist/ldcaret.min.js):
 
-```
     <link rel="stylesheet" type="text/css" href="ldcaret.min.js"/>
-```
 
 you an use a CDN, such as, from jsDelivr:
 
-```
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/loadingio/ldCaret@v0.0.1/dist/ldcaret.min.css"/>
-```
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/gh/loadingio/ldCaret@v0.0.1/dist/ldcaret.min.css"/>
 
 2. call desired API (see below) provided by `ldCaret` object:
 
-```
     ldCaret.get();
-```
 
 
 ## API
