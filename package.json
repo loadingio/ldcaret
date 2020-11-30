@@ -4,6 +4,9 @@
   "license": "MIT",
   "description": "Caret position in vanilla JS",
   "version": "2.0.0",
+  "files": [
+    "dist/**/*"
+  ],
   "homepage": "https://github.com/loadingio/ldCaret",
   "repository": {
     "type": "git",
@@ -17,8 +20,24 @@
     "start": "npx server -r web"
   },
   "devDependencies": {
+    "@loadingio/debounce.js": "0.0.1",
+    "@loadingio/ldquery": "^1.1.1",
+    "@loadingio/ldview": "0.0.1",
+    "bootstrap": "^4.5.3",
+    "bootstrap.ldui": "github:loadingio/bootstrap.ldui",
+    "fedep": "0.0.8",
     "livescript": ">=1.6.0",
-    "uglify-js": "=3.2.0",
-    "template": "github:zbryikt/template#v2.1.6"
+    "template": "github:zbryikt/template#v2.1.6",
+    "uglify-js": "=3.2.0"
+  },
+  "frontendDependencies": {
+    "root": "web/static/assets/lib",
+    "modules": [
+      "bootstrap",
+      "bootstrap.ldui",
+      "@loadingio/ldview",
+      "@loadingio/debounce.js",
+      "@loadingio/ldquery"
+    ]
   }
 }

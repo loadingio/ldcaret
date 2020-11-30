@@ -1,10 +1,10 @@
 doctype html
 html
-  include /../../static/assets/lib/ldui/pug/ldui.pug
+  include /../../static/assets/lib/bootstrap.ldui/main/index.pug
   include /mixins.pug
   head
-    +css("https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css")
-    +css("/assets/lib/ldui/ldui.min.css")
+    +css("assets/lib/bootstrap/main/css/bootstrap.min.css")
+    +css("assets/lib/bootstrap.ldui/main/bootstrap.ldui.min.css")
     style(type="text/css"): :stylus
       @keyframes blink
         0%   { opacity: 1 }
@@ -59,13 +59,15 @@ html
             .card.mb-4.shadow-sm: .card-body(ld="caret")
               +lorems(3, 100, 0.3)
 
-    +script("/assets/lib/ldui/ldui.min.js")
-    +script("/assets/lib/ldcaret.min.js")
+    +script("assets/lib/@loadingio/ldquery/main/ldq.min.js")
+    +script("assets/lib/@loadingio/ldview/main/ldview.min.js")
+    +script("assets/lib/@loadingio/debounce.js/main/debounce.min.js")
+    +script("assets/lib/bootstrap.ldui/main/bootstrap.ldui.min.js") 
+    +script("assets/lib/ldcaret/dev/ldcaret.min.js")
     script: :lsc
       document.addEventListener \click, (e) ->
         [x,y] = [e.clientX, e.clientY]
         ret = ldCaret.byPtr({x,y,node: document.body})
-        console.log ret.box
         view.get('caret').style <<< do
           left: "#{ret.box.x}px"
           top: "#{ret.box.y}px"
