@@ -5,7 +5,24 @@ html
   head
     +css("https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css")
     +css("/assets/lib/ldui/ldui.min.css")
+    style(type="text/css"): :stylus
+      @keyframes blink
+        0%   { opacity: 1 }
+        49%  { opacity: 1 }
+        50%  { opacity: 0 }
+        99%  { opacity: 0 }
+        100% { opacity: 1 }
+      .caret
+        position: absolute
+        height: 1.5em
+        width: 3px
+        background: #f0f
+        opacity: .7
+        animation: blink .75s linear infinite
+        z-index: 1000
+
   body
+    .caret(ld="caret")
     .w-640.mx-auto.rwd: .p-4
       .row
         .col-md-4
@@ -45,6 +62,13 @@ html
     +script("/assets/lib/ldui/ldui.min.js")
     +script("/assets/lib/ldcaret.min.js")
     script: :lsc
+      document.addEventListener \click, (e) ->
+        [x,y] = [e.clientX, e.clientY]
+        ret = ldCaret.byPtr({x,y,node: document.body})
+        console.log ret.box
+        view.get('caret').style <<< do
+          left: "#{ret.box.x}px"
+          top: "#{ret.box.y}px"
       rand-pos = (n) ->
         if n.nodeType != 1 => return [n, Math.floor(n.textContent.length * Math.random!)]
         return rand-pos n.childNodes[Math.floor(n.childNodes.length * Math.random!)]
