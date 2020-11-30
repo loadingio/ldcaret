@@ -30,7 +30,7 @@
         range = document.createRange!
         range.setStart ns, os
         range.setEnd (if ne? => ne else ns), (if oe? => oe else os)
-      else if opt.startContainer => # pass
+      else if opt.startContainer => range = opt
       if edit =>
         new-range = document.createRange!
         n = range.startContainer

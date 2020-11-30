@@ -39,7 +39,9 @@
         range = document.createRange();
         range.setStart(ns, os);
         range.setEnd(ne != null ? ne : ns, oe != null ? oe : os);
-      } else if (opt.startContainer) {}
+      } else if (opt.startContainer) {
+        range = opt;
+      }
       if (edit) {
         newRange = document.createRange();
         n = range.startContainer;
