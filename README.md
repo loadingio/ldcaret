@@ -43,7 +43,10 @@ ldCaret provides following API:
  * insert(arg) - insert or replace current selection with arg. arg could be:
    - text
    - Element
- * byPtr({node, x, y}) - get a closest possible caret position under `node` based on `(x,y)` coordinates.
+ * byPtr({node, x, y, method}) - get a closest possible caret position under `node` based on `(x,y)` coordinates.
+   - method: method name (string) of the distance calculation algorithm. possible values:
+     - `euclidean` - straight line distnace
+     - `vertical` - favor y distance against x distance. default value.
    - return value: {min, range, box}
      - min: minimal distance in px from the calculated caret to `(x,y)` coordinates.
      - range: corresponding range of the calculated caret.

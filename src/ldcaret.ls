@@ -1,4 +1,14 @@
 (->
+  caldis = do
+    vertical: (x, y, box) ->
+      tx = box.x + box.width / 2
+      ty = box.y + box.height / 2
+      return (tx - x) ** 2 + 10000 * (ty - y) ** 2
+    euclidean: (x, y, box) ->
+      tx = box.x + box.width / 2
+      ty = box.y + box.height / 2
+      return (tx - x) ** 2 + (ty - y) ** 2
+
   ldCaret = do
     # HTMLInputElement selectionStart / selectionEnd
     # IE9+, Edge12+
@@ -88,18 +98,18 @@
     # return: {min, range}
     #   - min: minimal distance from (x,y) to the closest caret
     #   - range: range object for the closest caret.
-    by-ptr: ({node, x, y, range}) ->
-      ret = ldCaret._by-ptr({node, x, y, range})
+    by-ptr: ({node, x, y, range, method}) ->
+      ret = ldCaret._by-ptr({node, x, y, range, method})
       box = ret.range.getBoundingClientRect!
       ret.box = box
       return ret
 
-    _by-ptr: ({node, x, y, range}) ->
+    _by-ptr: ({node, x, y, range, method}) ->
       if !range => range = document.createRange!
-      if node.nodeType == Element.TEXT_NODE => return ldCaret._by-ptr-in-text {node, x, y, range}
+      if node.nodeType == Element.TEXT_NODE => return ldCaret._by-ptr-in-text {node, x, y, range, method}
       min = null
       for i from 0 til node.childNodes.length =>
-        r = ldCaret._by-ptr {node: node.childNodes[i], x, y, range}
+        r = ldCaret._by-ptr {node: node.childNodes[i], x, y, range, method}
         if !min or r.min < min.min => min = r
       # min = null: this node is empty ( no childNodes ). select itself to get correct range box
       if !min =>
@@ -109,20 +119,16 @@
         range.setStart p, c.indexOf(node)
         range.setEnd p, c.indexOf(node) + 1
         box = range.getBoundingClientRect!
-        tx = box.x + box.width / 2
-        ty = box.y + box.height / 2
-        dist = (tx - x) ** 2 + (ty - y) ** 2
+        dist = caldis[method or \vertical] x, y, box
         min = {min: dist, range: range}
       return min
 
-    _by-ptr-in-text: ({node, x, y}) ->
+    _by-ptr-in-text: ({node, x, y, method}) ->
       range = document.createRange!
       for i from 0 til node.length + 1
         range.setStart node, i
         box = range.getBoundingClientRect!
-        tx = box.x + box.width / 2
-        ty = box.y + box.height / 2
-        dist = (tx - x) ** 2 + (ty - y) ** 2
+        dist = caldis[method or \vertical] x, y, box
         if !(min?) or dist < min => [idx, min] = [i, dist]
       range.setStart node, idx
       range.setEnd node, idx

@@ -1,3 +1,8 @@
+# 2.1.0
+
+ - add additional parameter `method` in `byPtr` method for deciding distance calculation algorithm.
+
+
 # 2.0.0
 
  - extend set api to adopt range, and add `edit` option to update range into the innermost text element.
