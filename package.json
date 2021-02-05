@@ -7,10 +7,10 @@
   "files": [
     "dist/**/*"
   ],
-  "homepage": "https://github.com/loadingio/ldCaret",
+  "homepage": "https://github.com/loadingio/ldcaret",
   "repository": {
     "type": "git",
-    "url": "https://github.com/loadingio/ldCaret"
+    "url": "https://github.com/loadingio/ldcaret"
   },
   "engines": {
     "node": ">=10.14.1",
