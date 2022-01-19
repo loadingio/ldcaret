@@ -1,10 +1,10 @@
 doctype html
 html
-  include /../../static/assets/lib/bootstrap.ldui/main/index.pug
+  include @/@loadingio/bootstrap.ext/index.pug
   include /mixins.pug
   head
-    +css("assets/lib/bootstrap/main/css/bootstrap.min.css")
-    +css("assets/lib/bootstrap.ldui/main/bootstrap.ldui.min.css")
+    +css("assets/lib/bootstrap/main/dist/css/bootstrap.min.css")
+    +css("assets/lib/@loadingio/bootstrap.ext/main/index.min.css")
     style(type="text/css"): :stylus
       @keyframes blink
         0%   { opacity: 1 }
@@ -22,7 +22,7 @@ html
         z-index: 1000
 
   body
-    .caret(ld="caret")
+    //.caret(ld="caret")
     .w-640.mx-auto.rwd: .p-4
       .row
         .col-md-4
@@ -59,33 +59,33 @@ html
             .card.mb-4.shadow-sm: .card-body(ld="caret")
               +lorems(3, 100, 0.3)
 
-    +script("assets/lib/@loadingio/ldquery/main/ldq.min.js")
-    +script("assets/lib/@loadingio/ldview/main/ldview.min.js")
-    +script("assets/lib/@loadingio/debounce.js/main/debounce.min.js")
-    +script("assets/lib/bootstrap.ldui/main/bootstrap.ldui.min.js") 
-    +script("assets/lib/ldcaret/dev/ldcaret.min.js")
-    script: :lsc
+    +script("assets/lib/@loadingio/ldquery/main/index.min.js")
+    +script("assets/lib/ldview/main/index.min.js")
+    +script("assets/lib/@loadingio/debounce.js/main/index.min.js")
+    +script("assets/lib/ldcaret/dev/index.min.js")
+    script(type="module"): :lsc
       document.addEventListener \click, (e) ->
         [x,y] = [e.clientX, e.clientY]
-        ret = ldCaret.byPtr({x,y,node: document.body})
+        ret = ldcaret.byPtr({x,y,node: document.body})
         view.get('caret').style <<< do
           left: "#{ret.box.x}px"
           top: "#{ret.box.y}px"
       rand-pos = (n) ->
+        console.log n
         if n.nodeType != 1 => return [n, Math.floor(n.textContent.length * Math.random!)]
         return rand-pos n.childNodes[Math.floor(n.childNodes.length * Math.random!)]
 
       view = new ldView do
         root: document
         handler: output: ({node}) ->
-          obj = ldCaret.get!
-          content = ldCaret.get-content!
+          obj = ldcaret.get!
+          content = ldcaret.get-content!
           if !obj.ns => return node.textContent = ""
           node.innerHTML = "#{obj.os} - #{obj.oe}<br>#content"
 
         action: click: do
-          clear: debounce 2000, -> ldCaret.clear!
-          "random-content": debounce 2000, -> ldCaret.set-content \12345
+          clear: debounce 0, -> ldcaret.clear!
+          "random-content": debounce 0, -> ldcaret.set-content \12345
           caret: ({node, evt}) ->
             view.render <[output]>
           random: ({node}) ->
@@ -101,5 +101,5 @@ html
               [ns, os] = rand-pos ns
               [ne, oe] = rand-pos ne
               if ns == ne => if os > oe => os = oe - 1
-            ldCaret.set { ns, ne, os, oe }
+            ldcaret.set { ns, ne, os, oe }
             view.render <[output]>

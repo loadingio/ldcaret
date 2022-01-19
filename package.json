@@ -3,7 +3,9 @@
   "name": "ldcaret",
   "license": "MIT",
   "description": "Caret position in vanilla JS",
-  "version": "2.1.0",
+  "version": "3.0.0",
+  "browser": "dist/index.min.js",
+  "main": "dist/index.min.js",
   "files": [
     "dist/**/*"
   ],
@@ -17,27 +19,27 @@
     "npm": ">=6.4.1"
   },
   "scripts": {
-    "start": "npx server -r web"
+    "start": "npx server -r web -o true"
   },
   "devDependencies": {
-    "@loadingio/debounce.js": "0.0.1",
-    "@loadingio/ldquery": "^1.1.1",
-    "@loadingio/ldview": "0.0.1",
     "bootstrap": "^4.5.3",
-    "bootstrap.ldui": "github:loadingio/bootstrap.ldui",
-    "fedep": "0.0.8",
+    "@loadingio/bootstrap.ext": "^0.0.4",
+    "@loadingio/debounce.js": "^1.0.1",
+    "@loadingio/ldquery": "^3.0.1",
+    "@zbryikt/template": "^2.3.33",
+    "ldview": "^1.0.0",
+    "fedep": "^1.1.0",
     "livescript": ">=1.6.0",
-    "template": "github:zbryikt/template#v2.1.6",
-    "uglify-js": "=3.2.0"
+    "uglify-js": "^3.13.1"
   },
   "frontendDependencies": {
     "root": "web/static/assets/lib",
     "modules": [
       "bootstrap",
-      "bootstrap.ldui",
-      "@loadingio/ldview",
+      "@loadingio/bootstrap.ext",
       "@loadingio/debounce.js",
-      "@loadingio/ldquery"
+      "@loadingio/ldquery",
+      "ldview"
     ]
   }
 }

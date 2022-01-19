@@ -1,9 +1,9 @@
 doctype html
 html
-  include /../../static/assets/lib/ldui/pug/ldui.pug
+  include @/@loadingio/bootstrap.ext/index.pug
   head
-    +css("https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css")
-    +css("/assets/lib/ldui/ldui.min.css")
+    +css("assets/lib/bootstrap/main/dist/css/bootstrap.min.css")
+    +css("assets/lib/@loadingio/bootstrap.ext/main/index.min.css")
   body
     .m-4.p-4
       textarea.form-control(ld="textarea",rows="5").
@@ -16,16 +16,15 @@ html
         div Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
         div Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
 
-    +script("/assets/lib/ldui/ldui.min.js")
     +script("/js/caret.js")
-    script: :lsc
+    script(type="module"): :lsc
       lc = {}
 
 
       caret = do
         set: (node, start, end) -> node.setSelectionRange start, end
         get: (node) -> [node.selectionStart, node.selectionEnd]
-      view = new ldView do
+      view = new ldview do
         root: document
         handler: do
           output: ({node}) -> node.textContent = lc.text + " / #{JSON.stringify(lc.obj)} "
