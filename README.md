@@ -1,26 +1,28 @@
-# ldCaret
+# ldcaret
 
 Caret Manipulation Library, in Vanilla JS.
 
 
 ## Usage
 
-1. download and include [ldcaret.js](https://raw.githubusercontent.com/loadingio/ldCaret/v2.0.0/dist/ldcaret.min.js):
+Install via npm:
 
-    <link rel="stylesheet" type="text/css" href="ldcaret.min.js"/>
+    npm install --save ldcaret
 
-you an use a CDN, such as, from jsDelivr:
 
-    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/gh/loadingio/ldCaret@v2.0.0/dist/ldcaret.min.css"/>
+include  js file:
 
-2. call desired API (see below) provided by `ldCaret` object:
+    <script src="path-to-ldcaret-js"></script>
 
-    ldCaret.get();
+
+call desired API (see below) provided by `ldcaret` object:
+
+    ldcaret.get();
 
 
 ## API
 
-ldCaret provides following API:
+ldcaret provides following API:
 
  * get() - get selection range in an object with following attributes:
    - ns: start container
